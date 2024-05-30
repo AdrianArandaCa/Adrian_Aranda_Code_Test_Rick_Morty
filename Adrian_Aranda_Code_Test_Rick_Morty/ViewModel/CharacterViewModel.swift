@@ -30,37 +30,48 @@ class CharacterViewModel: ObservableObject {
     @MainActor
     func getCharacters() async {
         showLoading = true
-        Task {
-            do {
-                if let charactersResponsesDataModel = await apiClient.getCharacters() {
-                    self.charactersResponsesDataModel = charactersResponsesDataModel
-                    characters = getCharactersModel(charactersResponsesDataModel: charactersResponsesDataModel)
-                }
-                
-            } catch {
-                print("error")
+        do {
+            if let charactersResponsesDataModel = try await apiClient.getCharacters() {
+                self.charactersResponsesDataModel = charactersResponsesDataModel
+                characters = getCharactersModel(charactersResponsesDataModel: charactersResponsesDataModel)
             }
-            showLoading = false
+        } catch CustomError.invalidURL {
+            print("Invalid URL provided")
+        } catch CustomError.invalidResponse {
+            print("Invalid response from server")
+        } catch CustomError.decodingError(let error) {
+            print("Decoding error: \(error)")
+        } catch CustomError.networkError(let error) {
+            print("Network error: \(error)")
+        } catch {
+            print("An unexpected error ocurred \(error)")
         }
+        showLoading = false
     }
     
     @MainActor
     func loadMoreCharacters() async {
         showLoading = true
-        Task {
-            do {
-                let moreCharacters = await apiClient.getMoreCharacters(url: charactersResponsesDataModel?.info.next ?? nil)
-                if moreCharacters != nil {
-                    self.charactersResponsesDataModel = moreCharacters
-                    if let characterResponsesDataModel = charactersResponsesDataModel {
-                        characters?.append(contentsOf: getCharactersModel(charactersResponsesDataModel: characterResponsesDataModel))
-                    }
+        do {
+            let moreCharacters = try await apiClient.getMoreCharacters(url: charactersResponsesDataModel?.info.next ?? nil)
+            if moreCharacters != nil {
+                self.charactersResponsesDataModel = moreCharacters
+                if let characterResponsesDataModel = charactersResponsesDataModel {
+                    characters?.append(contentsOf: getCharactersModel(charactersResponsesDataModel: characterResponsesDataModel))
                 }
-            } catch {
-                print("error")
             }
-            showLoading = false
+        } catch CustomError.invalidURL {
+            print("Invalid URL provided")
+        } catch CustomError.invalidResponse {
+            print("Invalid response from server")
+        } catch CustomError.decodingError(let error) {
+            print("Decoding error: \(error)")
+        } catch CustomError.networkError(let error) {
+            print("Network error: \(error)")
+        } catch {
+            print("An unexpected error ocurred \(error)")
         }
+        showLoading = false
     }
     
     func getLocation(character: CharacterModel, locationType: LocationType) async -> LocationModel? {
@@ -74,7 +85,7 @@ class CharacterViewModel: ObservableObject {
                     return getLocationModel(locationResponsesDataModel: location)
                 }
             case .origin:
-                if characterDetail.originResponseDataModel?.url != "", let origin = try await self.apiClient.getLocation(url: /*characterDetail.originResponseDataModel?.url*/"") {
+                if characterDetail.originResponseDataModel?.url != "", let origin = try await self.apiClient.getLocation(url: characterDetail.originResponseDataModel?.url) {
                     print("RESPONSE ORIGINRESPONSESDATAMODEL: \(origin)")
                     return getLocationModel(locationResponsesDataModel: origin)
                 }

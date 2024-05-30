@@ -17,43 +17,49 @@ enum CustomError: Error {
 final class APIClient {
     private let baseURL = "https://rickandmortyapi.com/api/"
     
-    func getCharacters() async -> CharactersResponsesDataModel? {
+    func getCharacters() async throws -> CharactersResponsesDataModel? {
         let urlCharacters = "character/"
-        guard let url = URL(string: String(format: "%@%@", baseURL, urlCharacters)) else {
-            fatalError("Missing URL")
-        }
-        let (data, response) = try! await URLSession.shared.data(from: url)
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else { fatalError ("Error while fetching data")}
-        
-        if let charactersResponsesDataModel = try? JSONDecoder().decode(CharactersResponsesDataModel.self, from: data) {
-            print("\(charactersResponsesDataModel)")
-            return charactersResponsesDataModel
-        }
-        return nil
-    }
-    
-    func getMoreCharacters(url: String?) async -> CharactersResponsesDataModel? {
-        if let urlCharacters = url {
-            guard let url = URL(string: urlCharacters) else { fatalError("Missing URL") }
+        guard let url = URL(string: String(format: "%@%@", baseURL, urlCharacters)) else { throw CustomError.invalidURL }
+        do {
             let (data, response) = try! await URLSession.shared.data(from: url)
-            guard (response as? HTTPURLResponse)?.statusCode == 200 else { fatalError("Error while fetching data") }
-            if let charactersResponsesDataModel = try? JSONDecoder().decode(CharactersResponsesDataModel.self, from: data) {
+            guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw CustomError.invalidResponse }
+            do {
+                let charactersResponsesDataModel = try JSONDecoder().decode(CharactersResponsesDataModel.self, from: data)
                 print("\(charactersResponsesDataModel)")
                 return charactersResponsesDataModel
+            } catch {
+                throw CustomError.decodingError(error)
             }
-            return nil
+        } catch {
+            throw CustomError.networkError(error)
+        }
+    }
+    
+    func getMoreCharacters(url: String?) async throws -> CharactersResponsesDataModel? {
+        if let urlCharacters = url {
+            guard let url = URL(string: urlCharacters) else { throw CustomError.invalidURL }
+            do {
+                let (data, response) = try! await URLSession.shared.data(from: url)
+                guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw CustomError.invalidResponse }
+                do {
+                    let charactersResponsesDataModel = try JSONDecoder().decode(CharactersResponsesDataModel.self, from: data)
+                    print("\(charactersResponsesDataModel)")
+                    return charactersResponsesDataModel
+                } catch {
+                    throw CustomError.decodingError(error)
+                }
+            } catch {
+                throw CustomError.networkError(error)
+            }
         }
         return nil
     }
     
     func getLocation(url: String?) async throws -> LocationResponsesDataModel? {
         if let urlLocation = url {
-            guard let url = URL(string: urlLocation) else {
-                throw CustomError.invalidURL
-            }
+            guard let url = URL(string: urlLocation) else { throw CustomError.invalidURL }
             do {
                 let (data, response) = try await URLSession.shared.data(from: url)
-                
                 guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw CustomError.invalidResponse }
                 do {
                     let locationResponsesDataModel = try JSONDecoder().decode(LocationResponsesDataModel.self, from: data)
@@ -70,16 +76,22 @@ final class APIClient {
         return nil
     }
     
-    func getEpisode(url: String?) async -> EpisodeResponsesDataModel? {
+    func getEpisode(url: String?) async throws -> EpisodeResponsesDataModel? {
         if let urlEpisode = url {
-            guard let url = URL(string: urlEpisode) else { fatalError("Missing URL") }
-            let (data, response) = try! await URLSession.shared.data(from: url)
-            guard (response as? HTTPURLResponse)?.statusCode == 200 else { fatalError("Error while fetching data") }
-            if let episodeResponsesDataModel = try? JSONDecoder().decode(EpisodeResponsesDataModel.self, from: data) {
-                print("\(episodeResponsesDataModel)")
-                return episodeResponsesDataModel
+            guard let url = URL(string: urlEpisode) else { throw CustomError.invalidURL }
+            do {
+                let (data, response) = try! await URLSession.shared.data(from: url)
+                guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw CustomError.invalidResponse }
+                do {
+                    let episodeResponsesDataModel = try JSONDecoder().decode(EpisodeResponsesDataModel.self, from: data)
+                    print("\(episodeResponsesDataModel)")
+                    return episodeResponsesDataModel
+                } catch {
+                    throw CustomError.decodingError(error)
+                }
+            } catch {
+                throw CustomError.networkError(error)
             }
-            return nil
         }
         return nil
     }
