@@ -16,8 +16,11 @@ struct TableView: View {
     var body: some View {
         ForEach(filteredCharacters, id:\.id) { character in
             Button(action: {
-                selectedCharacter = character
-                pushView.toggle()
+                Task {
+                    let characterDetail = await viewModel.getCharacterDetails(character: character)
+                    selectedCharacter = characterDetail
+                    pushView.toggle()
+                }
             }, label: {
                 CharacterCell(character: character)
                 .onAppear {

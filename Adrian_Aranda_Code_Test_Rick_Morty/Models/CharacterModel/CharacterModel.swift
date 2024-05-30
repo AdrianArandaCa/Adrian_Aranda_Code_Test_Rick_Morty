@@ -21,7 +21,7 @@ struct CharacterModel: Equatable {
     let type: String
 //    let gender: GenderType
     let gender: String
-    let origin, location: LocationModel?
+    var origin, location: LocationModel?
     let image: String?
     let episode: [String]
     let url: String

@@ -25,10 +25,10 @@ struct CharacterDetail: View {
                     }
                 }
             })
-            .frame(height: 400)
+            .frame(height: 395)
             .ignoresSafeArea()
             if character.name != "" {
-                TextRandomChange(text: character.name, trigger: true, transition: .identity, speed: 0.06)
+                TextRandomChange(text: character.name, trigger: true, transition: .numericText(), speed: 0.03)
                     .font(.largeTitle.bold())
             }
             Spacer()
