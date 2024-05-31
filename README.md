@@ -13,21 +13,21 @@
 
 ![Simulator Screenshot - iPhone 15 Pro - 2024-05-31 at 07 33 56](https://github.com/AdrianArandaCa/Adrian_Aranda_Code_Test_Rick_Morty/assets/103887837/761fea34-73ab-45a0-b503-e75da5fc5bfc)
 
-Tecnologías usadas:
-Swift
-SwiftUI
-MVVM
-RestAPI
-Async/Await
-Throws
-EnvironmentObject
-Injección de dependencias
-Clean code
-Extensions
-@ViewBuilder
-@Published
-@MainActor
-@EnvironmentObject
-@Binding
-@State
-@StateObject
+## Tecnologías usadas:
+* Swift
+* SwiftUI
+* MVVM
+* RestAPI
+* Async/Await
+* Throws
+* EnvironmentObject
+* Injección de dependencias
+* Clean code
+* Extensions
+* @ViewBuilder
+* @Published
+* @MainActor
+* @EnvironmentObject
+* @Binding
+* @State
+* @StateObject
