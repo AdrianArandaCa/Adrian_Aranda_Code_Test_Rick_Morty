@@ -16,7 +16,7 @@ struct ContentView: View {
     @State var pushView: Bool = false
     var body: some View {
         ScrollView(.vertical) {
-            LazyVStack(spacing: 15) {
+            LazyVStack(spacing: 4) {
                 TableView(searchText: $searchText, selectedCharacter: $selectedCharacter, pushView: $pushView).environmentObject(viewModel)
             }
             .safeAreaPadding(15)

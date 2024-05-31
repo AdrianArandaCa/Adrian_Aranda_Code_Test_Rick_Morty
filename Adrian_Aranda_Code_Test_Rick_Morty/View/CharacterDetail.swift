@@ -9,8 +9,9 @@ import SwiftUI
 
 struct CharacterDetail: View {
     var character: CharacterModel
+    var characterInfoShow: [String] = []
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             GeometryReader(content: { geometry in
                 let size = geometry.size
                 
@@ -18,19 +19,32 @@ struct CharacterDetail: View {
                     AsyncImage(url: URL(string: url)) { image in
                         image
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
+                            .aspectRatio(contentMode: .fill)
                             .frame(width: size.width, height: size.height)
+                            .clipped()
                     } placeholder: {
                         ProgressView()
                     }
                 }
             })
-            .frame(height: 395)
+            .frame(height: 400)
             .ignoresSafeArea()
-            if character.name != "" {
+            VStack(alignment: .leading) {
                 TextRandomChange(text: character.name, trigger: true, transition: .numericText(), speed: 0.03)
                     .font(.largeTitle.bold())
+                    .padding(.bottom, 16)
+                TextRandomChange(text: "Status: \(character.status)", trigger: true, transition: .numericText(), speed: 0.03)
+                    .font(.title3)
+                TextRandomChange(text: "Specie: \(character.species)", trigger: true, transition: .numericText(), speed: 0.03)
+                    .font(.title3)
+                TextRandomChange(text: "Gender: \(character.gender)", trigger: true, transition: .numericText(), speed: 0.03)
+                    .font(.title3)
+                TextRandomChange(text: "Origin: \(character.origin?.name ?? "Uknown origin")", trigger: true, transition: .numericText(), speed: 0.03)
+                    .font(.title3)
+                TextRandomChange(text: "Location: \(character.location?.name ?? "Uknown location")", trigger: true, transition: .numericText(), speed: 0.03)
+                    .font(.title3)
             }
+            .padding([.leading,.trailing], 8)
             Spacer()
             
         }
@@ -118,5 +132,5 @@ fileprivate extension View {
 }
 
 #Preview {
-    CharacterDetail(character: .empty)
+    CharacterDetail(character: .mockUp)
 }

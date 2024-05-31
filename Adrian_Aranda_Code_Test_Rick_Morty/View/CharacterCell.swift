@@ -17,24 +17,29 @@ struct CharacterCell: View {
                         image
                             .resizable()
                             .scaledToFit()
-                            .cornerRadius(20)
-                            .clipShape(Circle())
-                            .frame(width: 40, height: 40)
                     } placeholder: {
                         ProgressView()
                     }
-                    .frame(width: 40, height: 40)
                 }
-                Text(character.name)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.black)
+                VStack(alignment: .leading, spacing: 4){
+                    Text(character.name)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.black)
+                    Text(character.species)
+                        .fontWeight(.regular)
+                        .foregroundStyle(.black)
+                }
+                
                 Spacer()
             }
+            .background(.white)
+            .cornerRadius(10)
+            .frame(height:60)
         }
     }
     
 }
 
 #Preview {
-    CharacterCell(character: .empty)
+    CharacterCell(character: .mockUp)
 }

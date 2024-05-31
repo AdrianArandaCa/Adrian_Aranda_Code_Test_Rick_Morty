@@ -44,5 +44,5 @@ struct TableView: View {
 }
 
 #Preview {
-    TableView(searchText: .constant(""), selectedCharacter: .constant(CharacterModel.empty), pushView: .constant(false)).environmentObject(CharacterViewModel(apiClient: APIClient()))
+    TableView(searchText: .constant(""), selectedCharacter: .constant(.mockUp), pushView: .constant(false)).environmentObject(CharacterViewModel(apiClient: APIClient()))
 }
