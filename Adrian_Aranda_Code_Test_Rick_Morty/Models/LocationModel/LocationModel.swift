@@ -17,4 +17,12 @@ struct LocationModel {
     static var empty: Self {
         .init(id: 0, name: "", type: "", dimension: "", residents: [], url: "", created: "")
     }
+    
+    static var mockUpLocation: Self {
+        .init(id: 0, name: "LocationName", type: "Type", dimension: "Dimension", residents: [], url: "url", created: "created")
+    }
+    
+    static var mockUpOrigin: Self {
+        .init(id: 0, name: "OriginName", type: "Type", dimension: "Dimension", residents: [], url: "url", created: "created") 
+    }
 }

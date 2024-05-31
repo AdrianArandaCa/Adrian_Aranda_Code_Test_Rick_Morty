@@ -34,6 +34,6 @@ struct CharacterModel: Equatable {
     }
     
     static var mockUp: Self {
-        .init(id: 1, name: "Name", status: "status", species: "Species", type: "Type", gender: "Gender", origin: LocationModel.init(id: 0, name: "OriginName", type: "Type", dimension: "Dimension", residents: [], url: "url", created: "created") , location: LocationModel.init(id: 0, name: "LocationName", type: "Type", dimension: "Dimension", residents: [], url: "url", created: "created"), image:"https://rickandmortyapi.com/api/character/avatar/1.jpeg" , episode: [], url: "url", created: "created", locationResponseDataModel: nil, originResponseDataModel: nil)
+        .init(id: 1, name: "Name", status: "Status", species: "Species", type: "Type", gender: "Gender", origin: .mockUpOrigin, location: .mockUpLocation, image:"https://rickandmortyapi.com/api/character/avatar/1.jpeg" , episode: [], url: "url", created: "created", locationResponseDataModel: nil, originResponseDataModel: nil)
     }
 }
